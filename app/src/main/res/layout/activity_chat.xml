@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"> <de.hdodenhof.circleimageview.CircleImageView
+    android:layout_width="80dp"
+    android:layout_height="80dp"
+    android:id="@+id/movie_image"
+    android:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test text"
+        android:id="@+id/m_name"
+        android:layout_toRightOf="@+id/movie_image"
+        android:textColor="#000"
+        android:layout_marginLeft="30dp"
+        android:textSize="17sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test Description"
+        android:id="@+id/movie_description"
+        android:layout_below="@id/movie_image"
+        android:textColor="#000"
+        android:layout_marginLeft="110dp"
+        android:textSize="12sp"/>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_below="@id/movie_description"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="20">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/layout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/layout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </RelativeLayout>
+    </ScrollView>
+    <include
+        layout="@layout/message_area"
+        android:layout_alignBottom="@id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"/>
+</RelativeLayout>
+</LinearLayout>
