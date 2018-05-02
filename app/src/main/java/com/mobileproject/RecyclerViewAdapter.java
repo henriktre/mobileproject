@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.client.DataSnapshot;
@@ -124,8 +123,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked on: " + mImageNames.get(position));
 
-                Toast.makeText(mContext, mImageNames.get(position), Toast.LENGTH_SHORT).show();
-                Toast.makeText(mContext, mDesc.get(position), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, mImageNames.get(position), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, mDesc.get(position), Toast.LENGTH_SHORT).show();
 
                 MovieDetails.movNam = mImageNames.get(position);
                 MovieDetails.postUrl = mImages.get(position);

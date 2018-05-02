@@ -6,6 +6,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -150,7 +151,7 @@ public class Chat extends AppCompatActivity {
         }
         textView.setLayoutParams(lp2);
         layout.addView(textView);
-        scrollView.fullScroll(android.view.View.FOCUS_DOWN);
+        scrollView.fullScroll(View.FOCUS_DOWN);
     }
 
 
@@ -167,7 +168,7 @@ public class Chat extends AppCompatActivity {
         ImageView image = findViewById(R.id.movie_image);
         Glide.with(this)
                 .asBitmap()
-                .load(moviePoster)
+                .load(imageUrl)
                 .into(image);
     }
 }
