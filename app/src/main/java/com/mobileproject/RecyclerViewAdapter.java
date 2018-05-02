@@ -12,7 +12,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -47,11 +50,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Firebase.setAndroidContext(mContext);
         reference = new Firebase("https://mobileproject-3b6d7.firebaseio.com/users");
 
+
+
         return holder;
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+
+        reference.child(UserDetails.username).child("favourites").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot chld : dataSnapshot.getChildren() ){
+                    if(chld.getValue().equals(mImageNames.get(position))) {
+                        holder.btnFav.setImageResource(R.drawable.fav);
+                        holder.btnFav.setTag("fav");
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {}
+        });
+
         Log.d(TAG, "onBindViewHolder: called.");
 
         Glide.with(mContext)
@@ -71,13 +91,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 if(holder.btnFav.getTag() == "fav"){
                     holder.btnFav.setImageResource(R.drawable.nfav);
                     holder.btnFav.setTag("nfav");
+//                    reference.child(UserDetails.username).child("favourites").child(mImageNames.get(position));
+
+                    reference.child(UserDetails.username).child("favourites").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for(DataSnapshot chld : dataSnapshot.getChildren() ){
+                                if(chld.getValue().equals(mImageNames.get(position))) {
+                                    chld.getRef().removeValue();
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {}
+                    });
+
 
                 } else {
                     holder.btnFav.setImageResource(R.drawable.fav);
                     holder.btnFav.setTag("fav");
-                }
-                reference.child(UserDetails.username).child("favourites").child("movie").setValue(mImageNames.get(position));
+                    reference.child(UserDetails.username).child("favourites").push().setValue(mImageNames.get(position));
 
+                }
 
             }
         });
