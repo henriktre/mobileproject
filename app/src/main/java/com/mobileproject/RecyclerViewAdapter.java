@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +46,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: called.");
 
         Glide.with(mContext)
@@ -54,9 +55,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .into(holder.image);
 
         holder.imageName.setText(mImageNames.get(position));
+        holder.btnFav.setOnClickListener(new View.OnClickListener() {
+            @Override 
+            public void onClick(View view) {
+                Log.d(TAG, "onClick:  fav button clicked");
+
+                if(holder.btnFav.getTag() == "fav"){
+                    holder.btnFav.setImageResource(R.drawable.nfav);
+                    holder.btnFav.setTag("nfav");
+
+                } else {
+                    holder.btnFav.setImageResource(R.drawable.fav);
+                    holder.btnFav.setTag("fav");
+                }
+            }
+        });
 
 
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+                holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked on: " + mImageNames.get(position));
@@ -85,6 +101,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView desc;
         TextView imageName;
         RelativeLayout parentLayout;
+        ImageButton btnFav;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -92,6 +109,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             imageName = itemView.findViewById(R.id.movie_name);
             desc = itemView.findViewById(R.id.movie_description);
             parentLayout = itemView.findViewById(R.id.parent_layout);
+            btnFav = itemView.findViewById(R.id.btnFav);
         }
     }
+
+
 }
