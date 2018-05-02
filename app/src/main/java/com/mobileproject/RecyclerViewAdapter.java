@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.firebase.client.Firebase;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList<String> mImages = new ArrayList<>();
     private ArrayList<String> mDesc = new ArrayList<>();
     private Context mContext;
+    Firebase reference;
 
     public RecyclerViewAdapter(Context context, ArrayList<String> imageNames, ArrayList<String> images, ArrayList<String> desc ) {
         mImageNames = imageNames;
@@ -42,6 +44,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem, parent, false);
         ViewHolder holder = new ViewHolder(view);
+
+        Firebase.setAndroidContext(mContext);
+        reference = new Firebase("https://mobileproject-3b6d7.firebaseio.com/users");
+
         return holder;
     }
 
@@ -56,8 +62,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.imageName.setText(mImageNames.get(position));
         holder.btnFav.setOnClickListener(new View.OnClickListener() {
-            @Override 
+            @Override
             public void onClick(View view) {
+
+
+
                 Log.d(TAG, "onClick:  fav button clicked");
 
                 if(holder.btnFav.getTag() == "fav"){
@@ -68,6 +77,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     holder.btnFav.setImageResource(R.drawable.fav);
                     holder.btnFav.setTag("fav");
                 }
+                reference.child(UserDetails.username).child("favourites").child("movie").setValue(mImageNames.get(position));
+
+
             }
         });
 
