@@ -1,6 +1,7 @@
 package com.mobileproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Navigate extends AppCompatActivity {
 
@@ -33,39 +35,50 @@ public class Navigate extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigate);
-        api = new API(this);
-        Log.d(TAG, "onCreate: started.");
-        btnOnCinema = findViewById(R.id.btnOnCinema);
+        SharedPreferences settings = getSharedPreferences("Profile", MODE_PRIVATE);
+        String useN = settings.getString("Username", "");
+        String Pword = settings.getString("Password", "");
 
+        if (!Objects.equals(useN, "") && !Objects.equals(Pword, "")){
+            api = new API(this);
+            Log.d(TAG, "onCreate: started.");
 
-        btnOnCinema.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mImageUrls.clear();
-                mNames.clear();
+            UserDetails.username = useN;
+            UserDetails.password = Pword;
 
-                String res = api.getOnCinema();
-                try {
-                    JSONObject jsonObject = new JSONObject(res);
-                    JSONArray jsonArray = jsonObject.getJSONArray("results");
+            btnOnCinema = findViewById(R.id.btnOnCinema);
+            btnOnCinema.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mImageUrls.clear();
+                    mNames.clear();
 
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject result = jsonArray.getJSONObject(i);
-                        String title = result.getString("title");
-                        String imageUrl = "https://image.tmdb.org/t/p/w185" + result.getString("poster_path");
-                        String desc = result.getString("overview");
-                        initImageBitmaps(title, imageUrl, desc);
-                        Log.d(TAG, "title: " + title);
-                        Log.d(TAG, "imageurl: " + imageUrl);
-                        Log.d(TAG, "desc: " + desc);
+                    String res = api.getOnCinema();
+                    try {
+                        JSONObject jsonObject = new JSONObject(res);
+                        JSONArray jsonArray = jsonObject.getJSONArray("results");
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject result = jsonArray.getJSONObject(i);
+                            String title = result.getString("title");
+                            String imageUrl = "https://image.tmdb.org/t/p/w185" + result.getString("poster_path");
+                            String desc = result.getString("overview");
+                            initImageBitmaps(title, imageUrl, desc);
+                            Log.d(TAG, "title: " + title);
+                            Log.d(TAG, "imageurl: " + imageUrl);
+                            Log.d(TAG, "desc: " + desc);
+                        }
+                        initRecyclerView();
+                    } catch (JSONException e) {
+                        e.getStackTrace();
                     }
-                    initRecyclerView();
-                } catch (JSONException e) {
-                    e.getStackTrace();
-                }
 
-            }
-        });
+                }
+            });
+        }else {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
 
 
     }
@@ -89,6 +102,10 @@ public class Navigate extends AppCompatActivity {
                 startActivity(intent2);
                 return true;
             case R.id.logOut:
+                SharedPreferences.Editor editor = getSharedPreferences("Profile", MODE_PRIVATE).edit();
+                editor.putString("Username", "");
+                editor.putString("Password", "");
+                editor.apply();
                 finish();
                 return true;
             default:
