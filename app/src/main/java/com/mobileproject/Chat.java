@@ -45,6 +45,7 @@ public class Chat extends AppCompatActivity {
 
     String theWatched = MovieDetails.movNam;
     String moviePoster = MovieDetails.postUrl;
+    String description = MovieDetails.description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class Chat extends AppCompatActivity {
         sendButton = (ImageView)findViewById(R.id.sendButton);
 
 
-        setImage(moviePoster, theWatched);
+        setImage(moviePoster, theWatched, description);
 
         timeNow = new Date().getTime();
 
@@ -154,11 +155,14 @@ public class Chat extends AppCompatActivity {
 
 
 
-    private void setImage(String imageUrl, String imageName){
+    private void setImage(String imageUrl, String imageName, String description){
         Log.d(TAG, "setImage: setting the image and name to widgets.");
 
         TextView name = findViewById(R.id.m_name);
         name.setText(imageName);
+
+        TextView desc = findViewById(R.id.movie_description);
+        desc.setText(description);
 
         ImageView image = findViewById(R.id.movie_image);
         Glide.with(this)

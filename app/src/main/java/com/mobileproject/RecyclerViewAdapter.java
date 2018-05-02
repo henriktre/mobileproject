@@ -27,10 +27,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private ArrayList<String> mImageNames = new ArrayList<>();
     private ArrayList<String> mImages = new ArrayList<>();
+    private ArrayList<String> mDesc = new ArrayList<>();
     private Context mContext;
 
-    public RecyclerViewAdapter(Context context, ArrayList<String> imageNames, ArrayList<String> images ) {
+    public RecyclerViewAdapter(Context context, ArrayList<String> imageNames, ArrayList<String> images, ArrayList<String> desc ) {
         mImageNames = imageNames;
+        mDesc = desc;
         mImages = images;
         mContext = context;
     }
@@ -53,15 +55,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.imageName.setText(mImageNames.get(position));
 
+
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked on: " + mImageNames.get(position));
 
                 Toast.makeText(mContext, mImageNames.get(position), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, mDesc.get(position), Toast.LENGTH_SHORT).show();
 
                 MovieDetails.movNam = mImageNames.get(position);
                 MovieDetails.postUrl = mImages.get(position);
+                MovieDetails.description = mDesc.get(position);
                 Intent intent = new Intent(mContext, Chat.class);
                 mContext.startActivity(intent);
             }
@@ -77,6 +82,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         CircleImageView image;
+        TextView desc;
         TextView imageName;
         RelativeLayout parentLayout;
 
@@ -84,6 +90,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             super(itemView);
             image = itemView.findViewById(R.id.image);
             imageName = itemView.findViewById(R.id.movie_name);
+            desc = itemView.findViewById(R.id.movie_description);
             parentLayout = itemView.findViewById(R.id.parent_layout);
         }
     }

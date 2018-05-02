@@ -27,6 +27,7 @@ public class Navigate extends AppCompatActivity {
     //vars
      ArrayList<String> mNames = new ArrayList<>();
      ArrayList<String> mImageUrls = new ArrayList<>();
+     ArrayList<String> mDesc = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +53,11 @@ public class Navigate extends AppCompatActivity {
                         JSONObject result = jsonArray.getJSONObject(i);
                         String title = result.getString("title");
                         String imageUrl = "https://image.tmdb.org/t/p/w185" + result.getString("poster_path");
-                        initImageBitmaps(title, imageUrl);
+                        String desc = result.getString("overview");
+                        initImageBitmaps(title, imageUrl, desc);
                         Log.d(TAG, "title: " + title);
                         Log.d(TAG, "imageurl: " + imageUrl);
+                        Log.d(TAG, "desc: " + desc);
                     }
                     initRecyclerView();
                 } catch (JSONException e) {
@@ -93,10 +96,11 @@ public class Navigate extends AppCompatActivity {
         }
     }
 
-    private void initImageBitmaps(String title, String img) {
+    private void initImageBitmaps(String title, String img, String desc) {
         Log.d("initImageBitmaps: ", "preparing bitmaps.");
         mImageUrls.add(img);
         mNames.add(title);
+        mDesc.add(desc);
         Log.d(TAG, "initImageBitmaps: image: " + title);
         Log.d(TAG, "initImageBitmaps: image: " + img);
     }
@@ -104,7 +108,7 @@ public class Navigate extends AppCompatActivity {
     private void initRecyclerView(){
         Log.d(TAG, "initRecyclerView: init recyclerview.");
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mNames, mImageUrls);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mNames, mImageUrls, mDesc);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
