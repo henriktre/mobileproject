@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--/*-->
+<!--* 1: movie search-->
+<!--* 2: tv show search-->
+<!--* 3: company search-->
+<!--* 4: collection search-->
+<!--* 5: keyword search-->
+<!--* 6: person search-->
+<!--* 7: multi search (movies, tv shows and people)-->
+<!--* */-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--<item android:id="@+id/multi"-->
+        <!--android:title="All"-->
+        <!--app:showAsAction="never"/>-->
+    <item android:id="@+id/movies"
+        android:title="Movies"
+        app:showAsAction="never"/>
+    <item android:id="@+id/tv"
+        android:title="Tv shows"
+        app:showAsAction="never"/>
+    <!--<item android:id="@+id/company"-->
+        <!--android:title="Company"-->
+        <!--app:showAsAction="never"/>-->
+    <!--<item android:id="@+id/person"-->
+        <!--android:title="Person"-->
+        <!--app:showAsAction="never"/>-->
+</menu>

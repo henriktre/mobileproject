@@ -9,12 +9,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class Navigate extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    API api;
+    Button btnOnCinema;
 
     //vars
      ArrayList<String> mNames = new ArrayList<>();
@@ -24,9 +32,39 @@ public class Navigate extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigate);
+        api = new API(this);
         Log.d(TAG, "onCreate: started.");
+        btnOnCinema = findViewById(R.id.btnOnCinema);
 
-        initImageBitmaps();
+
+        btnOnCinema.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mImageUrls.clear();
+                mNames.clear();
+
+                String res = api.getOnCinema();
+                try {
+                    JSONObject jsonObject = new JSONObject(res);
+                    JSONArray jsonArray = jsonObject.getJSONArray("results");
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject result = jsonArray.getJSONObject(i);
+                        String title = result.getString("title");
+                        String imageUrl = "https://image.tmdb.org/t/p/w185" + result.getString("poster_path");
+                        initImageBitmaps(title, imageUrl);
+                        Log.d(TAG, "title: " + title);
+                        Log.d(TAG, "imageurl: " + imageUrl);
+                    }
+                    initRecyclerView();
+                } catch (JSONException e) {
+                    e.getStackTrace();
+                }
+
+            }
+        });
+
+
     }
 
     @Override
@@ -55,16 +93,12 @@ public class Navigate extends AppCompatActivity {
         }
     }
 
-    private void initImageBitmaps(){
-        Log.d(TAG, "initImageBitmaps: preparing bitmaps.");
-
-        mImageUrls.add("http://www.suttonsilver.co.uk/wp-content/uploads/blog-stock-02.jpg");
-        mNames.add("Test Movie");
-
-        mImageUrls.add("https://thumbs.dreamstime.com/z/online-robber-17098197.jpg");
-        mNames.add("Test Series");
-
-        initRecyclerView();
+    private void initImageBitmaps(String title, String img) {
+        Log.d("initImageBitmaps: ", "preparing bitmaps.");
+        mImageUrls.add(img);
+        mNames.add(title);
+        Log.d(TAG, "initImageBitmaps: image: " + title);
+        Log.d(TAG, "initImageBitmaps: image: " + img);
     }
 
     private void initRecyclerView(){
