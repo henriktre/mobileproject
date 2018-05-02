@@ -22,6 +22,7 @@
         <activity android:name=".Navigate" />
         <activity android:name=".Search" />
         <activity android:name=".Profile" />
+        <activity android:name=".Chat" />
     </application>
 
 </manifest>
