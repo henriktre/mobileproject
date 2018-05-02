@@ -28,6 +28,7 @@ public class Search extends AppCompatActivity {
     Button search;
     EditText searchText;
     ArrayList<String> mNames = new ArrayList<>();
+    ArrayList<String> mDesc = new ArrayList<>();
     ArrayList<String> mImageUrls = new ArrayList<>();
     int searchType;
     @Override
@@ -46,6 +47,7 @@ public class Search extends AppCompatActivity {
             public void onClick(View v) {
                 mImageUrls.clear();
                 mNames.clear();
+                mDesc.clear();
                 Log.d(TAG, "onClick search type: " + searchType);
                 String res = api.search(searchText.getText().toString(), searchType);
                 try {
@@ -62,9 +64,9 @@ public class Search extends AppCompatActivity {
                             if(result.getString("name") == null) break;
                             title = result.getString("name");
                         }
-                        if(result.getString("poster_path") == null) break;
                         String imageUrl = "https://image.tmdb.org/t/p/w185" + result.getString("poster_path");
-                        initImageBitmaps(title, imageUrl);
+                        String desc = result.getString("overview");
+                        initImageBitmaps(title, imageUrl, desc);
                     }
                     initRecyclerView();
                 } catch (JSONException e) {
@@ -100,15 +102,16 @@ public class Search extends AppCompatActivity {
         }
     }
 
-    private void initImageBitmaps(String title, String img) {
+    private void initImageBitmaps(String title, String img, String desc) {
         Log.d("initImageBitmaps: ", "preparing bitmaps.");
         mImageUrls.add(img);
         mNames.add(title);
+        mDesc.add(desc);
     }
     private void initRecyclerView(){
         Log.d("initRecyclerView: ", "init recyclerview.");
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mNames, mImageUrls);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mNames, mImageUrls, mDesc);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

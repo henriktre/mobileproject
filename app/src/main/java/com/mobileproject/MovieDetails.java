@@ -7,4 +7,5 @@ package com.mobileproject;
 public class MovieDetails {
   static String movNam;
   static String postUrl;
+  static String description;
 }
