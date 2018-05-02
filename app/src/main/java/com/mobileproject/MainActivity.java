@@ -2,6 +2,7 @@ package com.mobileproject;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -82,6 +83,13 @@ public class MainActivity extends AppCompatActivity {
                                     else if(obj.getJSONObject(user).getString("password").equals(pass)){
                                         UserDetails.username = user;
                                         UserDetails.password = pass;
+                                        //Remember password and username
+                                        SharedPreferences settings = getSharedPreferences("Profile", MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = settings.edit();
+                                        editor.putString("Username", user);
+                                        editor.putString("Password", pass);
+                                        editor.apply();
+
                                         startActivity(new Intent(MainActivity.this, Navigate.class));
                                     }
                                     else {

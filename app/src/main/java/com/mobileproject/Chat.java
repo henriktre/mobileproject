@@ -6,6 +6,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -43,9 +44,9 @@ public class Chat extends AppCompatActivity {
     public long timeNow;
 
 
-    String theWatched = MovieDetails.movNam;
-    String moviePoster = MovieDetails.postUrl;
-    String description = MovieDetails.description;
+    String theWatched;
+    String moviePoster;
+    String description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,21 +61,23 @@ public class Chat extends AppCompatActivity {
         sendButton = (ImageView)findViewById(R.id.sendButton);
 
 
+        //Show movie name, poster and description.
         setImage(moviePoster, theWatched, description);
 
+        //Get time
         timeNow = new Date().getTime();
 
         Firebase.setAndroidContext(this);
-
         reference = new Firebase("https://mobileproject-3b6d7.firebaseio.com/messages");
 
 
+        //When someone press the chatbutton.
         sendButton.setOnClickListener(new android.view.View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(android.view.View v) {
                 String messageText = messageArea.getText().toString();
-
+                //Only send the info if the message has value in it.
                 if(!messageText.equals("")){
                     Map<String, String> map = new HashMap<String, String>();
                     timestamp = new Date().getTime();
@@ -92,6 +95,7 @@ public class Chat extends AppCompatActivity {
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                //Get info from firebase and send it to addMessageBox.
                 Map map = dataSnapshot.getValue(Map.class);
                 String message = map.get("message").toString();
                 String userName = map.get("user").toString();
@@ -142,15 +146,17 @@ public class Chat extends AppCompatActivity {
         LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp2.weight = 1.0f;
 
+        //Use this for deciding if text should spawn on left or right side of screen.
         if(type == 1) {
             lp2.gravity = Gravity.LEFT;
         }
         else{
             lp2.gravity = Gravity.RIGHT;
         }
+        //Display text from down up.
         textView.setLayoutParams(lp2);
         layout.addView(textView);
-        scrollView.fullScroll(android.view.View.FOCUS_DOWN);
+        scrollView.fullScroll(View.FOCUS_UP);
     }
 
 
@@ -158,16 +164,19 @@ public class Chat extends AppCompatActivity {
     private void setImage(String imageUrl, String imageName, String description){
         Log.d(TAG, "setImage: setting the image and name to widgets.");
 
+        //Show movie name.
         TextView name = findViewById(R.id.m_name);
         name.setText(imageName);
 
+        //Set movie description.
         TextView desc = findViewById(R.id.movie_description);
         desc.setText(description);
 
+        //Set movie image.
         ImageView image = findViewById(R.id.movie_image);
         Glide.with(this)
                 .asBitmap()
-                .load(moviePoster)
+                .load(imageUrl)
                 .into(image);
     }
 }

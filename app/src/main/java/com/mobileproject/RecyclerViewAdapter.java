@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -30,6 +29,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList<String> mDesc = new ArrayList<>();
     private Context mContext;
 
+
+    //Constructor
     public RecyclerViewAdapter(Context context, ArrayList<String> imageNames, ArrayList<String> images, ArrayList<String> desc ) {
         mImageNames = imageNames;
         mDesc = desc;
@@ -37,6 +38,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         mContext = context;
     }
 
+    //No touching everyone, this is just a inflater.
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem, parent, false);
@@ -44,15 +46,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return holder;
     }
 
+    //This is where we have the Listener for pressing each
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: called.");
 
+        //This is for images, we use Glide, can be found on github, with that we can get images from
+        //the nett by using the images Url.
         Glide.with(mContext)
-                .asBitmap()
+                .asBitmap()     //Sett as bitmap
                 .load(mImages.get(position))
                 .into(holder.image);
 
+        //This sets the name of the
         holder.imageName.setText(mImageNames.get(position));
 
 
@@ -61,9 +67,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked on: " + mImageNames.get(position));
 
-                Toast.makeText(mContext, mImageNames.get(position), Toast.LENGTH_SHORT).show();
-                Toast.makeText(mContext, mDesc.get(position), Toast.LENGTH_SHORT).show();
+                //Just used to check if buttons listen.
+                //Toast.makeText(mContext, mImageNames.get(position), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, mDesc.get(position), Toast.LENGTH_SHORT).show();
 
+                //Set the Movidetails class to what we clicked
                 MovieDetails.movNam = mImageNames.get(position);
                 MovieDetails.postUrl = mImages.get(position);
                 MovieDetails.description = mDesc.get(position);
@@ -79,6 +87,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
+    //Just your every day viewholder.
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         CircleImageView image;
