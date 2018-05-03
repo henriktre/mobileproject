@@ -45,36 +45,38 @@ public class Search extends AppCompatActivity {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mImageUrls.clear();
-                mNames.clear();
-                mDesc.clear();
-                Log.d(TAG, "onClick search type: " + searchType);
-                String res = api.search(searchText.getText().toString(), searchType);
-                try {
-                    JSONObject jsonObject = new JSONObject(res);
-                    JSONArray jsonArray = jsonObject.getJSONArray("results");
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        String title;
-                        JSONObject result = jsonArray.getJSONObject(i);
-                        if(searchType == 1) {
-                            if(result.getString("title") == null) break;
-                            title = result.getString("title");
-                        } else {
-                            if(result.getString("name") == null) break;
-                            title = result.getString("name");
-                        }
-                        String imageUrl = "https://image.tmdb.org/t/p/w185" + result.getString("poster_path");
-                        String desc = result.getString("overview");
-                        initImageBitmaps(title, imageUrl, desc);
-                    }
-                    initRecyclerView();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+                search();
             }
         });
+    }
+    public void search () {
+        mImageUrls.clear();
+        mNames.clear();
+        mDesc.clear();
+        Log.d(TAG, "onClick search type: " + searchType);
+        String res = api.search(searchText.getText().toString(), searchType);
+        try {
+            JSONObject jsonObject = new JSONObject(res);
+            JSONArray jsonArray = jsonObject.getJSONArray("results");
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                String title;
+                JSONObject result = jsonArray.getJSONObject(i);
+                if(searchType == 1) {
+                    if(result.getString("title") == null) break;
+                    title = result.getString("title");
+                } else {
+                    if(result.getString("name") == null) break;
+                    title = result.getString("name");
+                }
+                String imageUrl = "https://image.tmdb.org/t/p/w185" + result.getString("poster_path");
+                String desc = result.getString("overview");
+                initImageBitmaps(title, imageUrl, desc);
+            }
+            initRecyclerView();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
