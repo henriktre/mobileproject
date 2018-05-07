@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         password = (EditText)findViewById(R.id.password);
         loginButton = (Button)findViewById(R.id.loginButton);
 
+        //Button to go to register.
         registerUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Log in user.
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 else{
 
                     //need to put in a file for hardcoded stuff
+                    //no, we cant be bothered, this is a link for the users btw.
                     String url = "https://mobileproject-3b6d7.firebaseio.com/users.json";
 
 
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
                     pd.setMessage("Loading...");
                     pd.show();
 
+                    //Checking if user exsist, and if they do, log in.
                     StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
                         @Override
                         public void onResponse(String s) {

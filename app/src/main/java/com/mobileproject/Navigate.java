@@ -35,10 +35,13 @@ public class Navigate extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigate);
+
+        //Checking if user is already logged in.
         SharedPreferences settings = getSharedPreferences("Profile", MODE_PRIVATE);
         String useN = settings.getString("Username", "");
         String Pword = settings.getString("Password", "");
 
+        //Check that they ain't empty, and if empty, send to login.
         if (!Objects.equals(useN, "") && !Objects.equals(Pword, "")){
             api = new API(this);
             Log.d(TAG, "onCreate: started.");
@@ -46,6 +49,7 @@ public class Navigate extends AppCompatActivity {
             UserDetails.username = useN;
             UserDetails.password = Pword;
 
+            //To show movies on cinema.
             btnOnCinema = findViewById(R.id.btnOnCinema);
             btnOnCinema.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -57,7 +61,7 @@ public class Navigate extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(res);
                         JSONArray jsonArray = jsonObject.getJSONArray("results");
-
+                        //Finding the input and putting it in arrays.
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject result = jsonArray.getJSONObject(i);
                             String title = result.getString("title");
@@ -83,6 +87,7 @@ public class Navigate extends AppCompatActivity {
 
     }
 
+    //Creating a menu on the topbar and sett what it is suposed to do.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -113,6 +118,7 @@ public class Navigate extends AppCompatActivity {
         }
     }
 
+    //Setting values in the arrays, and under sending them to the adapter.
     private void initImageBitmaps(String title, String img, String desc) {
         Log.d("initImageBitmaps: ", "preparing bitmaps.");
         mImageUrls.add(img);
