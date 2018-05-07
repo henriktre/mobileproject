@@ -5,6 +5,8 @@ package com.mobileproject;
  */
 
 public class MovieDetails {
+
+  //Used for storing moviename, postername and desciprion.
   static String movNam;
   static String postUrl;
   static String description;

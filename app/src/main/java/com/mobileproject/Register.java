@@ -41,10 +41,14 @@ public class Register extends AppCompatActivity {
         password = (EditText)findViewById(R.id.password);
         registerButton = (Button)findViewById(R.id.registerButton);
         login = (TextView)findViewById(R.id.login);
+        //To set a random username.
         randUse = randomIdentifier().replaceAll("\\s+","");
+
         Toast.makeText(Register.this, "If you don't choose a username, one will be set for you.", Toast.LENGTH_LONG).show();
+
         Firebase.setAndroidContext(this);
-        //Toast.makeText(Register.this, randUse, Toast.LENGTH_LONG).show();
+
+        //To go to mainactivity/login
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,13 +56,15 @@ public class Register extends AppCompatActivity {
             }
         });
 
+        //Button for registering user.
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 user = username.getText().toString();
-                pass = password.getText().toString();
+                pass = MD5(password.getText().toString());
 
-
+                //Checks if password and name is good.
                 if(user.equals("")){
                     username.setText(randUse);
                     Toast.makeText(Register.this, "Push Register again.", Toast.LENGTH_LONG).show();
@@ -77,15 +83,13 @@ public class Register extends AppCompatActivity {
                 }
                 else {
                     final ProgressDialog pd = new ProgressDialog(Register.this);
+
                     pd.setMessage("Loading...");
                     pd.show();
-
+                    //String to get users.
                     String url = "https://mobileproject-3b6d7.firebaseio.com/users.json";
 
-                    /*if(user.equals("")){
-                        Toast.makeText(Register.this, randUse, Toast.LENGTH_LONG).show();
-                        user = randUse;
-                    }*/
+                    //Checking if it exists and if not, saves it.
                     StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
                         @Override
                         public void onResponse(String s) {
@@ -144,5 +148,21 @@ public class Register extends AppCompatActivity {
             }
         }
         return builder.toString();
+    }
+
+    //MD5 is our choice of method regarding the Hashing of passwords.
+    //Mainly because of its simplicity to both create and to use.
+    public String MD5(String md5) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            byte[] array = md.digest(md5.getBytes());
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < array.length; ++i) {
+                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+        }
+        return null;
     }
 }
