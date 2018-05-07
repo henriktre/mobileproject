@@ -21,6 +21,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class MainActivity extends AppCompatActivity {
 
     TextView registerUser;
@@ -28,15 +31,17 @@ public class MainActivity extends AppCompatActivity {
     Button loginButton;
     String user, pass;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        registerUser = (TextView)findViewById(R.id.register);
-        username = (EditText)findViewById(R.id.username);
-        password = (EditText)findViewById(R.id.password);
-        loginButton = (Button)findViewById(R.id.loginButton);
+        registerUser = findViewById(R.id.register);
+        username = findViewById(R.id.username);
+        password = findViewById(R.id.password);
+        loginButton = findViewById(R.id.loginButton);
+
 
         //Button to go to register.
         registerUser.setOnClickListener(new View.OnClickListener() {
@@ -51,15 +56,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 user = username.getText().toString();
-                pass = password.getText().toString();
+                pass = MD5(password.getText().toString());
 
-                if(user.equals("")){
+                if (user.equals("")) {
                     username.setError("can't be blank");
-                }
-                else if(pass.equals("")){
+                } else if (pass.equals("")) {
                     password.setError("can't be blank");
-                }
-                else{
+                } else {
 
                     //need to put in a file for hardcoded stuff
                     //no, we cant be bothered, this is a link for the users btw.
@@ -70,21 +73,20 @@ public class MainActivity extends AppCompatActivity {
                     pd.setMessage("Loading...");
                     pd.show();
 
+
                     //Checking if user exsist, and if they do, log in.
                     StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
                         @Override
                         public void onResponse(String s) {
-                            if(s.equals("null")){
+                            if (s.equals("null")) {
                                 Toast.makeText(MainActivity.this, "user not found", Toast.LENGTH_LONG).show();
-                            }
-                            else{
+                            } else {
                                 try {
                                     JSONObject obj = new JSONObject(s);
 
-                                    if(!obj.has(user)){
+                                    if (!obj.has(user)) {
                                         Toast.makeText(MainActivity.this, "user not found", Toast.LENGTH_LONG).show();
-                                    }
-                                    else if(obj.getJSONObject(user).getString("password").equals(pass)){
+                                    } else if (obj.getJSONObject(user).getString("password").equals(pass)) {
                                         UserDetails.username = user;
                                         UserDetails.password = pass;
 
@@ -95,8 +97,7 @@ public class MainActivity extends AppCompatActivity {
                                         editor.apply();
 
                                         startActivity(new Intent(MainActivity.this, Navigate.class));
-                                    }
-                                    else {
+                                    } else {
                                         Toast.makeText(MainActivity.this, "incorrect password", Toast.LENGTH_LONG).show();
                                     }
                                 } catch (JSONException e) {
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
                             pd.dismiss();
                         }
-                    },new Response.ErrorListener(){
+                    }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
                             System.out.println("" + volleyError);
@@ -120,5 +121,20 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+ //MD5 is our choice of method regarding the Hashing of passwords.
+    //Mainly because of its simplicity to both create and to use.
+    public String MD5(String md5) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            byte[] array = md.digest(md5.getBytes());
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < array.length; ++i) {
+                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+        }
+        return null;
     }
 }

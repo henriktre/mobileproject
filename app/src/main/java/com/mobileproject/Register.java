@@ -62,7 +62,7 @@ public class Register extends AppCompatActivity {
             public void onClick(View v) {
 
                 user = username.getText().toString();
-                pass = password.getText().toString();
+                pass = MD5(password.getText().toString());
 
                 //Checks if password and name is good.
                 if(user.equals("")){
@@ -148,5 +148,21 @@ public class Register extends AppCompatActivity {
             }
         }
         return builder.toString();
+    }
+
+    //MD5 is our choice of method regarding the Hashing of passwords.
+    //Mainly because of its simplicity to both create and to use.
+    public String MD5(String md5) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            byte[] array = md.digest(md5.getBytes());
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < array.length; ++i) {
+                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+        }
+        return null;
     }
 }
