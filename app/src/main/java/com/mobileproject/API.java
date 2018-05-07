@@ -33,9 +33,6 @@ public class API {
 
 
         public String getOnCinema () {
-            response = "";
-
-
             RequestQueue queue = Volley.newRequestQueue(ctx);
             String discover = "3/discover/movie?api_key=";
             String onCinema = "&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=1";
@@ -61,8 +58,6 @@ public class API {
         }
 
         public String search (String userSearch, int type) {
-            response = "";
-
             RequestQueue queue = Volley.newRequestQueue(ctx);
 
             String search;
