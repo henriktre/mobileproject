@@ -5,6 +5,7 @@ package com.mobileproject;
  */
 
 public class UserDetails {
+    //Used to store username and password.
     static String username = "";
     static String password = "";
 }

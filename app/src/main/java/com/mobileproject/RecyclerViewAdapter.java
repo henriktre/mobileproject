@@ -35,6 +35,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context mContext;
     Firebase reference;
 
+    //Just constructor.
     public RecyclerViewAdapter(Context context, ArrayList<String> imageNames, ArrayList<String> images, ArrayList<String> desc ) {
         mImageNames = imageNames;
         mDesc = desc;
@@ -42,6 +43,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         mContext = context;
     }
 
+    //Don't touch this, it's just a view holder.
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem, parent, false);
@@ -55,6 +57,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return holder;
     }
 
+    //This is what we use to set the views.
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
@@ -85,13 +88,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onClick(View view) {
 
 
+                //Sett favourites(with the hearty emoji or some shit.)
 
                 Log.d(TAG, "onClick:  fav button clicked");
 
                 if(holder.btnFav.getTag() == "fav"){
                     holder.btnFav.setImageResource(R.drawable.nfav);
                     holder.btnFav.setTag("nfav");
-//                    reference.child(UserDetails.username).child("favourites").child(mImageNames.get(position));
+
 
                     reference.child(UserDetails.username).child("favourites").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -123,8 +127,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked on: " + mImageNames.get(position));
 
-                //Toast.makeText(mContext, mImageNames.get(position), Toast.LENGTH_SHORT).show();
-                //Toast.makeText(mContext, mDesc.get(position), Toast.LENGTH_SHORT).show();
+                //When you click on a view you put info in movieDetails and are sent to navigation.
 
                 MovieDetails.movNam = mImageNames.get(position);
                 MovieDetails.postUrl = mImages.get(position);
@@ -141,6 +144,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
+    //The viewHolder.
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         CircleImageView image;
